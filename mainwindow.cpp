@@ -93,8 +93,13 @@ void MainWindow::showSgInfo(Parser *ps,int row){
 }
 
 void MainWindow::showEditor(Parser *ps, int row){
+    int index = 0;
     ui->editorList->setRowCount(1);
-    ui->editorList->setSpan(0,3,1,5);
+    //ui->editorList->setSpan(0,3,1,5);
+    for(auto var:ps->getBOList().at(row).m_sgList){
+        addEditorRow(index+1,var.m_name,var.m_startBit,var.m_bitLen,var.m_type);
+        index++;
+    }
 }
 
 void MainWindow::addBORow(int row,quint16 id,const QString &name,int len,quint16 period){
@@ -155,10 +160,28 @@ void MainWindow::addSGRow(int row,const QString &name,quint8 start,quint8 len,qu
     ui->sgList ->setItem(row, 7, maxLine);
 }
 
+void MainWindow::addEditorRow(int row, const QString &name, quint8 start, quint8 len, quint8 format){
+    ui->editorList->insertRow(row);
+    QTableWidgetItem *nameLine = new QTableWidgetItem();
+    nameLine->setText(name);
+    ui->editorList ->setItem(row, 0, nameLine);
+
+    for(int i=0;i<len;i++){
+        int byteval = (start+i)/8;
+        int bitoffset = (start+i)%8;
+        int index = 1+byteval*8+(7-bitoffset);
+        QTableWidgetItem *itemLine = new QTableWidgetItem();
+        //itemLine->setText(QString::number(start));
+        itemLine->setBackgroundColor(QColor("#445566"));
+        ui->editorList ->setItem(row, index, itemLine);
+    }
+}
+
 void MainWindow::slt_BOCellClick(int row,int column){
     qDebug()<< "row:"<<row<<" column:"<<column;
     if(row!= m_BOCurrentRow){
         m_BOCurrentRow = row;
         showSgInfo(m_ps,m_BOCurrentRow);
+        showEditor(m_ps,m_BOCurrentRow);
     }
 }
