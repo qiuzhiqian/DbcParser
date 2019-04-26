@@ -12,10 +12,31 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->editorList->setRowCount(1);
+    for(int i=0;i<8;i++){
+        for(int j=0;j<8;j++){
+            ui->editorList->setColumnWidth(i*8+j+1,20);
+        }
+        ui->editorList->setSpan(0,i*8+1,1,8);
+
+        QString textStr="Byte "+QString::number(i);
+
+        QTableWidgetItem*    newItem = new QTableWidgetItem();
+        ui->editorList->setItem(0, i*8+1, newItem);
+        newItem->setTextAlignment(Qt::AlignCenter);
+        newItem->setText(textStr);
+        if( i%2 == 0 ){
+            newItem->setBackgroundColor(QColor(200,200,200));
+        }
+
+        //itemGet->setTextAlignment(Qt::AlignHCenter);
+        //itemGet->setText("byte0");
+    }
+
+
     connect(ui->pushButton,SIGNAL(clicked(bool)),this,SLOT(slt_openDbc()));
 
     connect(ui->boList,SIGNAL(cellClicked(int,int)),this,SLOT(slt_BOCellClick(int,int)));
-
 
 }
 
@@ -33,6 +54,7 @@ void MainWindow::slt_openDbc(){
     m_ps->doThing(m_dbcfile);
 
     showDbcInfo(m_ps);
+    showEditor(m_ps,m_BOCurrentRow);
 }
 
 void MainWindow::showDbcInfo(Parser *ps){
@@ -68,6 +90,11 @@ void MainWindow::showSgInfo(Parser *ps,int row){
         addSGRow(index,var.m_name,var.m_startBit,var.m_bitLen,var.m_type,var.m_factor,var.m_offset,var.m_min,var.m_max);
         index++;
     }
+}
+
+void MainWindow::showEditor(Parser *ps, int row){
+    ui->editorList->setRowCount(1);
+    ui->editorList->setSpan(0,3,1,5);
 }
 
 void MainWindow::addBORow(int row,quint16 id,const QString &name,int len,quint16 period){
