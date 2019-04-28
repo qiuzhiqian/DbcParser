@@ -3,8 +3,6 @@
 
 #include <QObject>
 
-#include "dbctable.h"
-
 class VAL{
 public:
     QString name;
