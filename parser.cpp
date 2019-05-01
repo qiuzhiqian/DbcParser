@@ -165,3 +165,47 @@ int Parser::findPeriodIndex(quint16 id, const QList<PERIOD> &pdList){
 QList<BO_>& Parser::getBOList(){
     return m_boList;
 }
+
+CPos Parser::posCalc(quint8 start, quint8 offset, quint8 format){
+    //7,15,23,31,39,47,55,63
+    CPos pos;
+    int stabyte = start/8;
+    int sta = stabyte*8;
+
+    int tempOffset = start+offset-sta;
+
+    int offByte = tempOffset/8;
+    pos.bitIndex = tempOffset%8;
+
+    if(format == 1){
+        pos.byteIndex = stabyte+offByte;
+    }
+    else{
+        pos.byteIndex = stabyte-offByte;
+    }
+    return pos;
+}
+
+CPos Parser::offsetToIndex(quint8 start, quint8 offset, quint8 format){
+    CPos pos;
+    int stabyte = start/8;
+    int sta = stabyte*8+7;
+    int len =sta- start + offset;
+
+    int deltByte = len/8;
+    pos.bitIndex = len%8;
+
+    if(format == 1){
+        pos.byteIndex = sta/8+deltByte;
+    }
+    else{
+        pos.byteIndex = sta/8-deltByte;
+    }
+    return pos;
+}
+
+CPos Parser::indexToPos(int index){
+    CPos pos;
+    pos.byteIndex = index/8;
+    pos.bitIndex = 7- (index%8);
+}

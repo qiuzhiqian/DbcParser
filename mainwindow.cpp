@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->boList,SIGNAL(cellClicked(int,int)),this,SLOT(slt_BOCellClick(int,int)));
 
+    //CPos pos = Parser::offsetToIndex(15,0,0);
+    //qDebug()<<"byte:"<< static_cast<int>(pos.byteIndex)<<" bit:"<<static_cast<int>(pos.bitIndex);
+
 }
 
 MainWindow::~MainWindow()
@@ -167,9 +170,11 @@ void MainWindow::addEditorRow(int row, const QString &name, quint8 start, quint8
     ui->editorList ->setItem(row, 0, nameLine);
 
     for(int i=0;i<len;i++){
-        int byteval = (start+i)/8;
-        int bitoffset = (start+i)%8;
-        int index = 1+byteval*8+(7-bitoffset);
+        CPos pos = Parser::offsetToIndex(start,static_cast<quint8>(i),format);
+        //int byteval = (start+i)/8;
+        //int bitoffset = (start+i)%8;
+        //int index = 1+byteval*8+(7-bitoffset);
+        int index = 1+pos.byteIndex*8+(7-pos.bitIndex);
         QTableWidgetItem *itemLine = new QTableWidgetItem();
         //itemLine->setText(QString::number(start));
         itemLine->setBackgroundColor(QColor("#445566"));
@@ -185,3 +190,5 @@ void MainWindow::slt_BOCellClick(int row,int column){
         showEditor(m_ps,m_BOCurrentRow);
     }
 }
+
+
