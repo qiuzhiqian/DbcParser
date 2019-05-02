@@ -6,6 +6,8 @@
 #include <QStandardPaths>
 #include <QDebug>
 
+#include "linedelegate.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -28,7 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
         if( i%2 == 0 ){
             newItem->setBackgroundColor(QColor(200,200,200));
         }
-
         //itemGet->setTextAlignment(Qt::AlignHCenter);
         //itemGet->setText("byte0");
     }
@@ -40,7 +41,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //CPos pos = Parser::offsetToIndex(15,0,0);
     //qDebug()<<"byte:"<< static_cast<int>(pos.byteIndex)<<" bit:"<<static_cast<int>(pos.bitIndex);
+    LineDelegate *idDelegate = new LineDelegate();
+    QIntValidator* idValid = new QIntValidator(0,0xfff);
+    idDelegate->setValidator(idValid);
+    ui->boList->setItemDelegateForColumn(1, idDelegate);
 
+    LineDelegate *lenDelegate = new LineDelegate();
+    QIntValidator* lenValid = new QIntValidator(1,8);
+    lenDelegate->setValidator(lenValid);
+    ui->boList->setItemDelegateForColumn(3, lenDelegate);
+
+    LineDelegate *typeDelegate = new LineDelegate();
+    QIntValidator* typeValid = new QIntValidator(0,1);
+    typeDelegate->setValidator(typeValid);
+    ui->sgList->setItemDelegateForColumn(3, typeDelegate);
 }
 
 MainWindow::~MainWindow()
