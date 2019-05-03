@@ -28,12 +28,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     parser.cpp \
-    linedelegate.cpp
+    linedelegate.cpp \
+    boxdelegate.cpp
 
 HEADERS += \
         mainwindow.h \
     parser.h \
-    linedelegate.h
+    linedelegate.h \
+    boxdelegate.h
 
 FORMS += \
         mainwindow.ui

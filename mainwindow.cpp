@@ -7,6 +7,7 @@
 #include <QDebug>
 
 #include "linedelegate.h"
+#include "boxdelegate.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -51,9 +52,14 @@ MainWindow::MainWindow(QWidget *parent) :
     lenDelegate->setValidator(lenValid);
     ui->boList->setItemDelegateForColumn(3, lenDelegate);
 
-    LineDelegate *typeDelegate = new LineDelegate();
-    QIntValidator* typeValid = new QIntValidator(0,1);
-    typeDelegate->setValidator(typeValid);
+    //LineDelegate *typeDelegate = new LineDelegate();
+    //QIntValidator* typeValid = new QIntValidator(0,1);
+    //typeDelegate->setValidator(typeValid);
+    //ui->sgList->setItemDelegateForColumn(3, typeDelegate);
+    BoxDelegate *typeDelegate = new BoxDelegate();
+    QStringList sl;
+    sl << "intel"<<"motolora";
+    typeDelegate->setItemEnum(sl);
     ui->sgList->setItemDelegateForColumn(3, typeDelegate);
 }
 
@@ -157,7 +163,13 @@ void MainWindow::addSGRow(int row,const QString &name,quint8 start,quint8 len,qu
     ui->sgList ->setItem(row, 2, lenLine);
 
     QTableWidgetItem *formatLine = new QTableWidgetItem();
-    formatLine->setText(QString::number(format));
+    if(format == 0){
+        formatLine->setText("motolora");
+    }
+    else{
+        formatLine->setText("intel");
+    }
+
     ui->sgList ->setItem(row, 3, formatLine);
 
     QTableWidgetItem *factorLine = new QTableWidgetItem();
