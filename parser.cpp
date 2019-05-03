@@ -24,7 +24,7 @@ bool Parser::doThing(const QString &file){
     QRegExp rx_frame(tr("BO_ (\\d{1,4}) (\\S+): (\\d{1}) Vector__XXX"));
     //SG_ \S+ : \d{1,2}\|\d{1,2}@[01]{1}\+ \([0-9.]+,[0-9.]+\) \[\d{1,8}\|\d{1,8}\] "\S{0,}" Vector__XXX
     //SG_ (\S+) : (\d{1,2})\|(\d{1,2})@([01]{1})\+ \(([0-9.\-]+),([0-9.\-]+)\) \[([0-9.\-]+)\|([0-9.\-]+)\] \"(\S{0,})\" Vector__XXX
-    QRegExp rx_item(tr("SG_ (\\S+) : (\\d{1,2})\\|(\\d{1,2})@([01]{1})[\\+\\-] \\(([0-9.\\-eE\\+]+),([0-9.\\-eE\\+]+)\\) \\[([0-9.\\-eE\\+]+)\\|([0-9.\\-eE\\+]+)\\] \"(\\S{0,})\" Vector__XXX"));
+    QRegExp rx_item(tr("SG_ (\\S+) : (\\d{1,2})\\|(\\d{1,2})@([01]{1})[\\+\\-] \\(([0-9.\\-eE\\+]+),([0-9.\\-eE\\+]+)\\) \\[([0-9.\\-eE\\+]+)\\|([0-9.\\-eE\\+]+)\\] \"([\\S ]{0,})\" Vector__XXX"));
     //BA_ "GenMsgCycleTime" BO_ 657 10;
     QRegExp rx_period(tr("BA_ \"GenMsgCycleTime\" BO_ (\\d+) (\\d+);"));
     while (!fileVal.atEnd()) {
@@ -72,7 +72,7 @@ bool Parser::doThing(const QString &file){
                     tempSg.m_offset = mathstr.at(6).toDouble();
                     tempSg.m_min = mathstr.at(7).toDouble();
                     tempSg.m_max = mathstr.at(8).toDouble();
-                    tempSg.m_uint = mathstr.at(9);
+                    tempSg.m_unit = mathstr.at(9);
                     tempBo.m_sgList.append(tempSg);
                 }
                 else{

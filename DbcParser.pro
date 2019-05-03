@@ -29,16 +29,19 @@ SOURCES += \
         mainwindow.cpp \
     parser.cpp \
     linedelegate.cpp \
-    boxdelegate.cpp
+    boxdelegate.cpp \
+    dbceditor.cpp
 
 HEADERS += \
         mainwindow.h \
     parser.h \
     linedelegate.h \
-    boxdelegate.h
+    boxdelegate.h \
+    dbceditor.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    dbceditor.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

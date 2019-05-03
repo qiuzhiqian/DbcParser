@@ -31,7 +31,7 @@ public:
     double m_offset;
     double m_min;
     double m_max;
-    QString m_uint;
+    QString m_unit;
     QList<VAL> m_valList;
 };
 
