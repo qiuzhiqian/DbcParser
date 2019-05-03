@@ -21,10 +21,10 @@ bool Parser::doThing(const QString &file){
     //VAL_TABLE_ ([0-9a-zA-Z_]+) (\d{0,8} "[\S ]+" )+;
     QRegExp rx_enum(tr("VAL_TABLE_ ([0-9a-zA-Z_]+) (\\d{0,8} \"[\\S ]+\" )+;"));
     //BO_ \d{1,4} \S+: \d{1} Vector__XXX
-    QRegExp rx_frame(tr("BO_ (\\d{1,4}) (\\S+): (\\d{1}) Vector__XXX"));
+    QRegExp rx_frame(tr("BO_ (\\d{1,4}) (\\S+): (\\d{1}) ([\\S]+)"));
     //SG_ \S+ : \d{1,2}\|\d{1,2}@[01]{1}\+ \([0-9.]+,[0-9.]+\) \[\d{1,8}\|\d{1,8}\] "\S{0,}" Vector__XXX
     //SG_ (\S+) : (\d{1,2})\|(\d{1,2})@([01]{1})\+ \(([0-9.\-]+),([0-9.\-]+)\) \[([0-9.\-]+)\|([0-9.\-]+)\] \"(\S{0,})\" Vector__XXX
-    QRegExp rx_item(tr("SG_ (\\S+) : (\\d{1,2})\\|(\\d{1,2})@([01]{1})[\\+\\-] \\(([0-9.\\-eE\\+]+),([0-9.\\-eE\\+]+)\\) \\[([0-9.\\-eE\\+]+)\\|([0-9.\\-eE\\+]+)\\] \"([\\S ]{0,})\" Vector__XXX"));
+    QRegExp rx_item(tr("SG_ (\\S+)( [mM]\\d{1,4}){0,1} : (\\d{1,2})\\|(\\d{1,2})@([01]{1})[\\+\\-] \\(([0-9.\\-eE\\+]+),([0-9.\\-eE\\+]+)\\) \\[([0-9.\\-eE\\+]+)\\|([0-9.\\-eE\\+]+)\\] \"([\\S ]{0,})\" (Vector__XXX| [\\S]+)"));
     //BA_ "GenMsgCycleTime" BO_ 657 10;
     QRegExp rx_period(tr("BA_ \"GenMsgCycleTime\" BO_ (\\d+) (\\d+);"));
     while (!fileVal.atEnd()) {
@@ -65,14 +65,22 @@ bool Parser::doThing(const QString &file){
                     //qDebug()<<output;
                     SG_ tempSg;
                     tempSg.m_name = mathstr.at(1);
-                    tempSg.m_startBit = static_cast<quint8>(mathstr.at(2).toInt());
-                    tempSg.m_bitLen = static_cast<quint8>(mathstr.at(3).toInt());
-                    tempSg.m_type = static_cast<quint8>(mathstr.at(4).toInt());
-                    tempSg.m_factor = mathstr.at(5).toDouble();
-                    tempSg.m_offset = mathstr.at(6).toDouble();
-                    tempSg.m_min = mathstr.at(7).toDouble();
-                    tempSg.m_max = mathstr.at(8).toDouble();
-                    tempSg.m_unit = mathstr.at(9);
+                    if(mathstr.at(2).size()>0){
+                        tempSg.m_multiplexer = mathstr.at(2).mid(1);
+                    }
+                    else{
+                        tempSg.m_multiplexer = "";
+                    }
+
+                    tempSg.m_startBit = static_cast<quint8>(mathstr.at(3).toInt());
+                    tempSg.m_bitLen = static_cast<quint8>(mathstr.at(4).toInt());
+                    tempSg.m_type = static_cast<quint8>(mathstr.at(5).toInt());
+                    tempSg.m_factor = mathstr.at(6).toDouble();
+                    tempSg.m_offset = mathstr.at(7).toDouble();
+                    tempSg.m_min = mathstr.at(8).toDouble();
+                    tempSg.m_max = mathstr.at(9).toDouble();
+                    tempSg.m_unit = mathstr.at(10);
+                    tempSg.m_recv = mathstr.at(11);
                     tempBo.m_sgList.append(tempSg);
                 }
                 else{
@@ -200,6 +208,12 @@ CPos Parser::offsetToIndex(quint8 start, quint8 offset, quint8 format){
     }
     else{
         pos.byteIndex = sta/8-deltByte;
+    }
+    if(pos.byteIndex<0){
+        pos.byteIndex = 7;
+    }
+    else if(pos.byteIndex>7){
+        pos.byteIndex = 0;
     }
     return pos;
 }

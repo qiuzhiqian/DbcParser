@@ -24,6 +24,7 @@ public:
 class SG_ {
 public:
     QString m_name;
+    QString m_multiplexer;
     quint8 m_startBit;
     quint8 m_bitLen;
     quint8 m_type;
@@ -32,6 +33,7 @@ public:
     double m_min;
     double m_max;
     QString m_unit;
+    QString m_recv;
     QList<VAL> m_valList;
 };
 
@@ -41,6 +43,7 @@ public:
     quint16 m_id;
     quint8 m_length;
     quint16 m_period;
+    QString m_trans;
     QList<SG_> m_sgList;
 };
 
