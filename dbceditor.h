@@ -32,7 +32,8 @@ private:
     Parser* m_ps;
     int m_BOCurrentRow;
 public slots:
-    void slt_BOCellClick(int row,int column);
+    void slt_BORowChanged(const QModelIndex& current, const QModelIndex& previous);
+
 };
 
 #endif // DBCEDITOR_H

@@ -30,14 +30,18 @@ SOURCES += \
     parser.cpp \
     linedelegate.cpp \
     boxdelegate.cpp \
-    dbceditor.cpp
+    dbceditor.cpp \
+    dbcmodel.cpp \
+    sgmodel.cpp
 
 HEADERS += \
         mainwindow.h \
     parser.h \
     linedelegate.h \
     boxdelegate.h \
-    dbceditor.h
+    dbceditor.h \
+    dbcmodel.h \
+    sgmodel.h
 
 FORMS += \
         mainwindow.ui \
